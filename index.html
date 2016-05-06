@@ -8,12 +8,20 @@
     <script src="jquery-ui.min.js"></script>
   </head>
   <body>
+    <div class="toolbar">
+      <input type="file" nwdirectory style="display:none;" id="folderChooser" />
+      <script src="main.js"></script>
+      <input value="add folder" type="button" onclick="chooseFile('#folderChooser')" />
+      <input value="save" type="button" onclick="exportJSON()" />
+      <input value="export reveal.js" type="button" onclick="exportRevealJs()" />
+
+    </div>
     <h1>Step 1: select folder</h1>
-    <input type="file" nwdirectory style="display:none;" id="folderChooser" />
-    <script src="main.js"></script>
-    <input value="add folder" type="button" onclick="chooseFile('#folderChooser')" />
-    <input value="save" type="button" onclick="generateJSON()" />
     <h1>Step 2: reorder pictures</h1>
+    <h1>Step 3: add description</h1>
+    <h1>Step 4: save json</h1>
+    <h1>Step 5: present</h1>
+
     <table id="thumbnail-table">
       <thead>
         <tr><td>show?</td><td>picture</td><td>text</td></tr>
@@ -21,8 +29,5 @@
       <tbody>
       </tbody>
     </table>
-    <h1>Step 3: add description</h1>
-    <h1>Step 4: save json</h1>
-    <h1>Step 5: present</h1>
   </body>
 </html>

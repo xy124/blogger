@@ -34,7 +34,7 @@ function chooseFile(name) {
 
 function fillTable(list) {
         list.forEach((it) => {
-                var newRow = '<tr><td><input type="checkbox" checked="'+it.checked+'" /></td><td><img src="file://'+it.name+'" class="thumbnail" alt="'+it.name+'" /></td><td><textarea>'+it.description+'</textarea></td></tr>';
+                var newRow = '<tr><td><input type="checkbox" checked="'+it.checked+'" /></td><td><img src="'+it.name+'" class="thumbnail" alt="'+it.name+'" /></td><td><textarea>'+it.description+'</textarea></td></tr>';
                 $('#thumbnail-table tbody').append(newRow);
         });
 }
@@ -56,7 +56,7 @@ function generateThumbnails(p) {
                 fs.readdir(p, (err, files) => {
                         var list = files.filter((filename) => { return filename.match(/.*\.jpg/i); })
                                 .map((filename) => {
-                                        return makeEntry(path.join(p, filename));
+                                        return makeEntry('file://' + path.join(p, filename));
                                 });
 
                         fillTable(list);
@@ -87,35 +87,49 @@ $(() => {
         });
         console.log('here');
 
-        generateThumbnails("/home/xy124/Pictures/2014");
+        generateThumbnails("/home/xy124/Pictures/2016/trondheim");
 });
-
-function generateJSON() {
-        console.log("table: ");
+function generateList() {
         var list = [];
         $('#thumbnail-table tbody tr').each((it, obj) => {
                 list.push(makeEntry(
-                                        $(obj).find('img')[0].src,
+                                        decodeURI($(obj).find('img')[0].src),
                                         $($(obj).find('textarea')[0]).val(),
                                         $(obj).find('input')[0].checked
                                    ));
         });
-
-
-
-
         console.log(list);
-
-        fs.writeFile(indexFileName, JSON.stringify(list), (err) =>
-                        {
-                                if (!err) {
-                                        console.log('successfully saved to ' + indexFileName);
-                                } else {
-                                        var msg ="oh no could not save to "+ indexFileName;
-                                        alert(msg);
-                                        throw err;
-                                }
-                        });
+        return list;
+}
 
 
+function makeFileErrorHandler(filename) {
+  return (err) =>
+  {
+    if (!err) {
+      console.log('successfully saved to ' + filename);
+    } else {
+      var msg = 'oh no! could not save to ' + filename;
+      alert(msg);
+      throw err;
+    }
+  };
+}
+
+function exportJSON() {
+  var list = generateList();
+  fs.writeFile(indexFileName, JSON.stringify(list), makeFileErrorHandler(indexFileName));
+}
+
+
+var Hogan = require('hogan.js'),
+    reveal_template = Hogan.compile(fs.readFileSync('./revealjs.tmpl', {encoding: 'utf8'}));
+
+function exportRevealJs() {
+  var list = generateList().filter((elem) => {
+    return elem.checked;
+  });
+  var output = reveal_template.render({pictures: list}),
+      filename = path.join(require.resolve('reveal.js'), '../..', 'pictures.html');
+  fs.writeFile(filename, output, makeFileErrorHandler(filename));
 }
