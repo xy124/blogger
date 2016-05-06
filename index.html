@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Easy-picture-blogging</title>
+    <link rel="stylesheet" href="jquery-ui.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+  </head>
+  <body>
+    <h1>Step 1: select folder</h1>
+    <input type="file" nwdirectory style="display:none;" id="folderChooser" />
+    <script src="main.js"></script>
+    <input value="add folder" type="button" onclick="chooseFile('#folderChooser')" />
+    <input value="save" type="button" onclick="generateJSON()" />
+    <h1>Step 2: reorder pictures</h1>
+    <table id="thumbnail-table">
+      <thead>
+        <tr><td>show?</td><td>picture</td><td>text</td></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <h1>Step 3: add description</h1>
+    <h1>Step 4: save json</h1>
+    <h1>Step 5: present</h1>
+  </body>
+</html>

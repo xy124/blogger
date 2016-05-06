@@ -1,0 +1,14 @@
+{
+        "main": "index.html",
+        "name": "Easy-picture-blogging",
+        "description": "for easy picture blogging",
+        "version": "0.1.0",
+        "window": {
+                "title": "Easy-picture-blogging",
+                "width": 800,
+                "height": 500
+        },
+        "scripts": {
+                "start": "nw ."
+        }
+}
