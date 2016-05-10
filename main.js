@@ -34,7 +34,7 @@ function chooseFile(name) {
 
 function fillTable(list) {
         list.forEach((it) => {
-                var newRow = '<tr><td><input type="checkbox" checked="'+it.checked+'" /></td><td><img src="'+it.name+'" class="thumbnail" alt="'+it.name+'" /></td><td><textarea>'+it.description+'</textarea></td></tr>';
+                var newRow = '<tr><td><input type="checkbox" '+(it.checked ? 'checked' : '')+' /></td><td><img src="'+it.name+'" class="thumbnail" alt="'+it.name+'" /></td><td><textarea>'+it.description+'</textarea></td></tr>';
                 $('#thumbnail-table tbody').append(newRow);
         });
 }
