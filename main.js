@@ -123,7 +123,7 @@ function exportJSON() {
 
 
 var Hogan = require('hogan.js'),
-    reveal_template = Hogan.compile(fs.readFileSync('./revealjs.tmpl', {encoding: 'utf8'}));
+    reveal_template = Hogan.compile(fs.readFileSync('./revealjs.tpl.html', {encoding: 'utf8'}));
 
 function exportRevealJs() {
   var list = generateList().filter((elem) => {
