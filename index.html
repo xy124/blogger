@@ -2,15 +2,12 @@
 <html>
   <head>
     <title>Easy-picture-blogging</title>
-    <link rel="stylesheet" href="jquery-ui.min.css">
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="jquery.min.js"></script>
-    <script src="jquery-ui.min.js"></script>
   </head>
   <body>
     <div class="toolbar">
       <input type="file" nwdirectory style="display:none;" id="folderChooser" />
-      <script src="main.js"></script>
       <input value="add folder" type="button" onclick="chooseFile('#folderChooser')" />
       <input value="save" type="button" onclick="exportJSON()" />
       <input value="export reveal.js" type="button" onclick="exportRevealJs()" />
@@ -29,5 +26,8 @@
       <tbody>
       </tbody>
     </table>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>

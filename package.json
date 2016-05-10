@@ -14,5 +14,9 @@
   "dependencies": {
     "hogan.js": "^3.0.2",
     "reveal.js": "^3.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xy124/blogger.git"
   }
 }

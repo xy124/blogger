@@ -2,13 +2,14 @@
 
 ## Installation
 
-- npm install -g cordova
+- npm install -g nw bower
 - git clone https://github.com/xy124/blogger.git
 - cd blogger
 - npm i
+- bower i
 
 ## usage
-- nwjs .
+- nw
 
 ### in gui:
 Step 1: select folder
