@@ -34,13 +34,13 @@ function chooseFile(name) {
 
 function fillTable(list) {
         list.forEach((it) => {
-                var newRow = '<tr><td><input type="checkbox" '+(it.checked ? 'checked' : '')+' /></td><td><img src="'+it.name+'" class="thumbnail" alt="'+it.name+'" /></td><td><textarea>'+it.description+'</textarea></td></tr>';
+                var newRow = '<tr><td><input type="checkbox" '+(it.checked ? 'checked' : '')+' /></td><td><img src="'+it.name+'" class="thumbnail" alt="'+it.filename+'" /></td><td><textarea>'+it.description+'</textarea></td></tr>';
                 $('#thumbnail-table tbody').append(newRow);
         });
 }
 
 function makeEntry(filename, text, checked) {
-        return {"name": filename, "description": text || '', "checked": checked !== false};
+        return {"name": 'file://' + filename, "filename": filename,  "description": text || '', "checked": checked !== false};
 }
 
 
@@ -56,7 +56,7 @@ function generateThumbnails(p) {
                 fs.readdir(p, (err, files) => {
                         var list = files.filter((filename) => { return filename.match(/.*\.jpg/i); })
                                 .map((filename) => {
-                                        return makeEntry('file://' + path.join(p, filename));
+                                        return makeEntry(path.join(p, filename));
                                 });
 
                         fillTable(list);
@@ -87,18 +87,18 @@ $(() => {
         });
         console.log('here');
 
-        generateThumbnails("/home/xy124/Pictures/2016/trondheim");
+        //generateThumbnails("/home/xy124/Pictures/2016/trondheim");
+        generateThumbnails(process.env.PWD);
 });
 function generateList() {
         var list = [];
         $('#thumbnail-table tbody tr').each((it, obj) => {
                 list.push(makeEntry(
-                                        decodeURI($(obj).find('img')[0].src),
+                                        decodeURI($(obj).find('img')[0].alt),
                                         $($(obj).find('textarea')[0]).val(),
                                         $(obj).find('input')[0].checked
                                    ));
         });
-        console.log(list);
         return list;
 }
 
@@ -123,13 +123,54 @@ function exportJSON() {
 
 
 var Hogan = require('hogan.js'),
-    reveal_template = Hogan.compile(fs.readFileSync('./revealjs.tpl.html', {encoding: 'utf8'}));
+    reveal_template = Hogan.compile(fs.readFileSync('./revealjs.tpl.html', {encoding: 'utf8'})),
+    simple_html_template = Hogan.compile(fs.readFileSync('./simple_html.tpl.html', {encoding: 'utf8'}));
 
-function exportRevealJs() {
+
+function getCheckedPictures() {
   var list = generateList().filter((elem) => {
     return elem.checked;
   });
-  var output = reveal_template.render({pictures: list}),
-      filename = path.join(require.resolve('reveal.js'), '../..', 'pictures.html');
-  fs.writeFile(filename, output, makeFileErrorHandler(filename));
+  return list;
+}
+
+function isRelativePaths() {
+    return document.getElementById('relativePathsCheckBox').checked;
+}
+
+function exportRevealJs() {
+    var p = path.join(require.resolve('reveal.js'), '../..');
+
+    exportHTML(reveal_template, './pictures.html', p);
+}
+
+function exportSimpleHTML() {
+
+    var filename = './pictures_simple.html';
+    exportHTML(simple_html_template, filename, process.env.PWD);
+}
+
+function exportHTML(template, filename, p) {
+    var pictures = getCheckedPictures();
+    if (isRelativePaths()) {
+        console.log('Using relative paths');
+        pictures = pictures.map(function(elem) {
+            return {
+                description: elem.description,
+                name: path.relative(p, elem.filename)
+            };
+        });
+    } else {
+        pictures = pictures.map(function(elem) {
+            return {
+                description: elem.description,
+                name: elem.name
+            };
+        });
+    }
+
+
+    var output = template.render({pictures: pictures});
+
+    fs.writeFile(path.join(p, filename), output, makeFileErrorHandler(filename));
 }
