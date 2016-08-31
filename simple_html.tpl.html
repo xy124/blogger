@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Images</title>
+  </head>
+  <body>
+    <h1>Images</h1>
+    <table width="100%">
+      {{#pictures}}
+      <tr>
+        <td>
+          <img src="{{name}}" alt="{{name}}" style="max-width:40%; max-height:50%" />
+          <div style="width: 100%; padding-bottom: 5%;">
+            {{description}}
+          </div>
+        </td>
+      </tr>
+      {{/pictures}}
+    </table>
+  </body>
+</html>
