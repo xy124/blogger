@@ -6,7 +6,6 @@ var fs = require('fs'),
 var INDEX_FILE = 'pictures.json';
 var indexFileName = '';
 
-
 /* blueprint:
    files = [
    {
@@ -172,5 +171,5 @@ function exportHTML(template, filename, p) {
 
     var output = template.render({pictures: pictures});
 
-    fs.writeFile(path.join(p, filename), output, makeFileErrorHandler(filename));
+    fs.writeFile(path.join(p, filename), output, {encoding: 'ascii'}, makeFileErrorHandler(filename));
 }
