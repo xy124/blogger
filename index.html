@@ -10,9 +10,9 @@
       <input type="file" nwdirectory style="display:none;" id="folderChooser" />
       <input value="add folder" type="button" onclick="chooseFile('#folderChooser')" />
       <input value="save" type="button" onclick="exportJSON()" />
-      <input value="export reveal.js" type="button" onclick="exportRevealJs()" />
-      <input value="export simple html" type="button" onclick="exportSimpleHTML()" />
-      <input value="export lightview" type="button" onclick="exportLightview()" />
+      <input value="export reveal.js" type="button" onclick="doExport('revealJs')" />
+      <input value="export simple html" type="button" onclick="doExport('simpleHTML')" />
+      <input value="export lightview" type="button" onclick="doExport('lightview')" />
       <label><input type="checkbox" id="relativePathsCheckBox" checked />relative Paths</label>
 
     </div>

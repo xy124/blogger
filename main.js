@@ -1,7 +1,8 @@
 "use strict"
 
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    gui = require('nw.gui');
 
 var INDEX_FILE = 'pictures.json';
 var indexFileName = '';
@@ -67,28 +68,56 @@ function generateThumbnails(p) {
 }
 
 $(() => {
-        require('nw.gui').Window.get().showDevTools();
+    var argv = gui.App.argv;
+    if (argv.indexOf('--debug') != -1) {
+        gui.Window.get().showDevTools();
+    }
+    if (argv.indexOf('--export-only') != -1) {
+        var found = '';
+        exporters.some((elm) => {
+            if (argv.indexOf(elm.name) != -1) {
+                found = elm;
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        if (found) {
+            found.doExport();
+        } else {
+            console.error('Found no valid Exporter!');
+        }
+
+        gui.App.quit();
+
+
+    } else {
+
         $("tbody").sortable({
-                items: "> tr",
-                appendTo: "parent",
-                helper: "clone"
+            items: "> tr",
+            appendTo: "parent",
+            helper: "clone"
         }).disableSelection();
 
         $("#tabs ul li a").droppable({
-                hoverClass: "drophover",
-                tolerance: "pointer",
-                drop: function(e, ui) {
-                        var tabdiv = $(this).attr("href");
-                        console.log("asdf");
-                        $(tabdiv + " table tr:last").after("<tr>" + ui.draggable.html() + "</tr>");
-                        ui.draggable.remove();
-                }
+            hoverClass: "drophover",
+            tolerance: "pointer",
+            drop: function(e, ui) {
+                var tabdiv = $(this).attr("href");
+                console.log("asdf");
+                $(tabdiv + " table tr:last").after("<tr>" + ui.draggable.html() + "</tr>");
+                ui.draggable.remove();
+            }
         });
         console.log('here');
 
         //generateThumbnails("/home/xy124/Pictures/2016/trondheim");
         generateThumbnails(process.env.PWD);
+    }
 });
+
+
 function generateList() {
         var list = [];
         $('#thumbnail-table tbody tr').each((it, obj) => {
@@ -138,21 +167,41 @@ function isRelativePaths() {
     return document.getElementById('relativePathsCheckBox').checked;
 }
 
-function exportRevealJs() {
-    var p = path.join(require.resolve('reveal.js'), '../..');
-
-    exportHTML(reveal_template, './pictures.html', p);
+function doExport(what) {
+    exporters.some((elm) => {
+        if (elm.name == what) {
+            elm.doExport();
+            return true;
+        } else {
+            return false;
+        }
+    });
 }
 
-function exportSimpleHTML() {
-    var filename = './pictures_simple.html';
-    exportHTML(simple_html_template, filename, process.env.PWD);
-}
+var exporters = [
+{
+    name: 'revealJs',
+    doExport: () => {
+        var p = path.join(require.resolve('reveal.js'), '../..');
 
-function exportLightview() {
-    var filename = './lightview.html';
-    exportHTML(lightview_template, filename, process.env.PWD);
+        exportHTML(reveal_template, './pictures.html', p);
+    }
+},
+{
+    name: 'simpleHTML',
+    doExport: () => {
+        var filename = './pictures_simple.html';
+        exportHTML(simple_html_template, filename, process.env.PWD);
+    }
+},
+{
+    name: 'lightview',
+    doExport: () => {
+        var filename = './lightview.html';
+        exportHTML(lightview_template, filename, process.env.PWD);
+    }
 }
+];
 
 function exportHTML(template, filename, p) {
     var pictures = getCheckedPictures();
