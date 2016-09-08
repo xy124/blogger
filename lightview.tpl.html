@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Images</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>-->
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/js/excanvas/excanvas.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="lightview/js/spinners/spinners.min.js"></script>
+        <script type="text/javascript" src="lightview/js/lightview/lightview.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="lightview/css/lightview/lightview.css"/>
+  </head>
+  <body>
+    <h1>Images</h1>
+    </a>
+      {{#pictures}}
+        <a href="{{name}}"
+          class="lightview"
+          data-lightview-group-options="controls: 'thumbnails'"
+          data-lightview-title="{{name}}"
+          data-lightview-caption="{{description}}"
+          data-lightview-group="all">{{name}}</a> <br>
+      {{/pictures}}
+  </body>
+</html>

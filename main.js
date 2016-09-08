@@ -123,7 +123,8 @@ function exportJSON() {
 
 var Hogan = require('hogan.js'),
     reveal_template = Hogan.compile(fs.readFileSync('./revealjs.tpl.html', {encoding: 'utf8'})),
-    simple_html_template = Hogan.compile(fs.readFileSync('./simple_html.tpl.html', {encoding: 'utf8'}));
+    simple_html_template = Hogan.compile(fs.readFileSync('./simple_html.tpl.html', {encoding: 'utf8'})),
+    lightview_template = Hogan.compile(fs.readFileSync('./lightview.tpl.html', {encoding: 'utf8'}));
 
 
 function getCheckedPictures() {
@@ -144,9 +145,13 @@ function exportRevealJs() {
 }
 
 function exportSimpleHTML() {
-
     var filename = './pictures_simple.html';
     exportHTML(simple_html_template, filename, process.env.PWD);
+}
+
+function exportLightview() {
+    var filename = './lightview.html';
+    exportHTML(lightview_template, filename, process.env.PWD);
 }
 
 function exportHTML(template, filename, p) {
